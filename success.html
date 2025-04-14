@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Страница подтверждения успешной оплаты">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+    <title>Оплачено!</title>
+    <style>
+        :root {
+            --primary-color: #00CC00;
+            --hover-color: #00A800;
+            --text-color-light: #2c3e50;
+            --text-color-dark: #e0e0e0;
+            --background-color-light: linear-gradient(135deg, #f5f5f5, #e0e0ff);
+            --background-color-dark: linear-gradient(135deg, #121212, #2b2b40);
+            --success-bg-light: #fff;
+            --success-bg-dark: #1e1e1e;
+            --logo-size: 200px; /* Размер логотипа */
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: var(--background-color-dark);
+                --success-bg: var(--success-bg-dark);
+                --text-color: var(--text-color-dark);
+                --primary-color: #00A800;
+                --hover-color: #008F00;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --background-color: var(--background-color-light);
+                --success-bg: var(--success-bg-light);
+                --text-color: var(--text-color-light);
+            }
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: var(--background-color); /* Градиентный фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.5;
+            padding: 1rem; /* Уменьшаем отступы для мобильных */
+            overflow-x: hidden;
+            text-align: center; /* Центрируем весь текст */
+        }
+
+        .success-card {
+            background: var(--success-bg);
+            padding: 1.5rem; /* Уменьшаем внутренние отступы */
+            border-radius: 16px; /* Меньший радиус скругления */
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                0 0 15px rgba(0, 204, 0, 0.2); /* Градиентная тень */
+            text-align: center;
+            max-width: 95%;
+            width: 100%;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Анимация появления элементов */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Логотип */
+        .logo-container {
+            position: relative;
+            width: var(--logo-size); /* Размер контейнера */
+            height: var(--logo-size); /* Размер контейнера */
+            margin: 0 auto 1rem; /* Центрирование и отступ снизу */
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+            -webkit-user-drag: none;
+            touch-action: manipulation;
+        }
+
+        .logo-container:active {
+            transform: scale(0.95);
+        }
+
+        .logo {
+            max-width: 85%; /* Ограничение ширины */
+            max-height: 85%; /* Ограничение высоты */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+            background: transparent; /* Прозрачный фон */
+            border: none; /* Без рамок */
+        }
+
+        /* Анимация кружка вокруг логотипа */
+        .circle-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid var(--primary-color); /* Уменьшаем толщину границы */
+            box-shadow: 
+                0 0 20px rgba(0, 204, 0, 0.9),
+                0 0 40px rgba(0, 204, 0, 0.7),
+                0 0 60px rgba(0, 204, 0, 0.5);
+            animation: circleSpin 2s infinite linear;
+        }
+
+        @keyframes circleSpin {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.9; }
+            50% { transform: rotate(180deg) scale(1.05); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.9; }
+        }
+
+        /* Статичный текст под кругом */
+        .static-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7); /* Полупрозрачный текст */
+            margin-bottom: 1rem; /* Отступ снизу */
+            white-space: nowrap; /* Запрет переноса текста */
+            transition: color 0.3s ease; /* Плавное изменение цвета */
+            text-align: center; /* Выравнивание по центру */
+        }
+
+        /* Адаптивность для маленьких экранов */
+        @media (max-width: 480px) {
+            :root {
+                --logo-size: 150px; /* Уменьшаем размер логотипа */
+            }
+
+            .static-text {
+                font-size: 12px; /* Уменьшаем размер текста */
+                white-space: normal; /* Разрешаем перенос текста */
+                padding: 0 1rem; /* Добавляем внутренние отступы */
+            }
+
+            h1 {
+                font-size: 1.8rem; /* Уменьшаем заголовок */
+            }
+
+            p {
+                font-size: 0.9rem; /* Уменьшаем основной текст */
+                margin-bottom: 1.5rem; /* Уменьшаем отступ */
+            }
+
+            .button {
+                width: 100%; /* Кнопка занимает всю ширину */
+                padding: 0.8rem 1.5rem; /* Уменьшаем внутренние отступы */
+                font-size: 0.9rem; /* Уменьшаем текст на кнопке */
+            }
+
+            .circle-animation {
+                border: 4px solid var(--primary-color); /* Ещё меньше толщина границы */
+            }
+
+            .success-card {
+                padding: 1rem; /* Уменьшаем внутренние отступы */
+            }
+        }
+
+        /* Заголовок */
+        h1 {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.4rem;
+            font-weight: 700;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Текст */
+        p {
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+            max-width: 40ch; /* Ограничиваем ширину текста */
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Кнопка */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--hover-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.1),
+                0 0 15px rgba(0, 204, 0, 0.3); /* Градиентная тень */
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            background: linear-gradient(135deg, var(--hover-color), var(--primary-color));
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.15),
+                0 0 20px rgba(0, 204, 0, 0.5); /* Усиленная градиентная тень */
+            transform: translateY(-6px);
+            outline: none;
+        }
+
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Иконка в кнопке */
+        .button svg {
+            margin-right: 0.5rem;
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* Таймер для автоматического перенаправления */
+        #redirect-message {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <main class="success-card" role="main" aria-label="Страница успешной оплаты">
+        <!-- Логотип с анимацией кружка -->
+        <div class="logo-container">
+            <div class="circle-animation"></div>
+
+            <!-- Логотип с резервным SVG -->
+            <img 
+                src="logo.png?v=2" 
+                alt="Логотип компании" 
+                onerror="this.outerHTML='<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' style=\'width: 85%; height: 85%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);\'><circle cx=\'50\' cy=\'50\' r=\'40\' fill=\'#00CC00\' /><text x=\'50\' y=\'60\' font-size=\'30\' text-anchor=\'middle\' fill=\'white\'>✅</text></svg>';" 
+                class="logo">
+        </div>
+
+        <!-- Статичный текст под кругом -->
+        <div class="static-text">
+            HIDE VPN — скорость, безопасность и свобода в один клик.
+        </div>
+
+        <!-- Заголовок -->
+        <h1>Оплачено!</h1>
+
+        <!-- Текст -->
+        <p>
+            Благодарим вас за использование нашего VPN.<br>
+            Ваш платёж был успешно обработан,<br>
+            и теперь вы можете вернуться обратно в бота.
+        </p>
+
+        <!-- Кнопка -->
+        <a href="https://t.me/Hide_Guard_VPNBot" class="button" role="button" aria-label="Вернуться в бота">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 19l-7-7 7-7m8 14l7-7-7-7"/></svg>
+            Вернуться в бота
+        </a>
+
+        <!-- Сообщение о перенаправлении -->
+        <p id="redirect-message">Вы будете перенаправлены в бота через <span id="timer">30</span> секунд...</p>
+    </main>
+
+    <script>
+        // Таймер для автоматического перенаправления
+        let timeLeft = 30;
+        const timerElement = document.getElementById("timer");
+        const countdown = setInterval(() => {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                window.location.href = "https://t.me/Hide_Guard_VPNBot";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
